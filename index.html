@@ -3,85 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TON EMPIRE</title>
+    <title>TON EMPIRE VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* كود تنسيق بسيط وقوي لضمان التحميل */
+        :root {
+            --bg-base: #06080d;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-blue: #00f0ff;
+            --premium-gold: linear-gradient(135deg, #FFDF00 0%, #D4AF37 50%, #996515 100%);
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            background: #02050a;
-            background-image: radial-gradient(circle at 50% 20%, #1e3a5f 0%, #02050a 100%);
-            color: white;
-            font-family: sans-serif;
-            margin: 0; padding: 15px;
-            text-align: center;
+            background-color: var(--bg-base);
+            /* خلفية فخمة جداً متدرجة */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 215, 0, 0.05), transparent 25%);
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0; padding: 20px;
+            height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
         }
 
-        /* حاوية العملات */
-        .stats {
-            display: flex; gap: 10px; margin-bottom: 30px;
+        /* رأس الصفحة - الهوية */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .profile-badge {
+            background: var(--glass-bg); backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 30px;
+            padding: 8px 16px; display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-        .stat-card {
-            flex: 1; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 12px;
-            display: flex; justify-content: space-between; align-items: center;
+        .level-text { font-size: 12px; font-weight: 600; color: #aaa; letter-spacing: 1px; }
+        
+        /* كروت الأرصدة - تصميم زجاجي فخم */
+        .balances { display: flex; gap: 15px; margin-bottom: 40px; }
+        .balance-card {
+            flex: 1; background: var(--glass-bg); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 16px; position: relative; overflow: hidden;
+        }
+        .balance-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+        }
+        .card-cash::before { background: #00f0ff; box-shadow: 0 0 10px #00f0ff; }
+        .card-gem::before { background: #FFDF00; box-shadow: 0 0 10px #FFDF00; }
+        
+        .bal-title { font-size: 11px; color: #888; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        .bal-amount { font-family: 'Space Mono', monospace; font-size: 18px; margin-top: 5px; }
+
+        /* مفاعل التعدين - بنيته بالكود ليكون خرافياً وبدون صور */
+        .reactor-container {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            position: relative; flex-direction: column; margin-top: -20px;
+        }
+        .reactor-core {
+            width: 140px; height: 140px; border-radius: 50%;
+            background: radial-gradient(circle, #00f0ff 0%, #0055ff 70%, transparent 100%);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.4), inset 0 0 20px #fff;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 50px; position: relative; z-index: 10;
+            animation: levitate 4s ease-in-out infinite;
+        }
+        .reactor-ring {
+            position: absolute; width: 220px; height: 220px; border-radius: 50%;
+            border: 2px dashed rgba(0, 240, 255, 0.3);
+            animation: spin 15s linear infinite;
+        }
+        .reactor-ring-2 {
+            position: absolute; width: 280px; height: 280px; border-radius: 50%;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            animation: spin-reverse 20s linear infinite;
         }
 
-        /* الماكينة المركزية - استخدمت صورة موثوقة للتحميل */
-        .machine {
-            width: 220px; height: 220px;
-            background: url('https://w7.pngwing.com/pngs/309/250/png-transparent-robot-head-mecha-fictional-character-robot-thumbnail.png') center/contain no-repeat;
-            filter: drop-shadow(0 0 20px #00d2ff);
-            margin: 40px auto;
+        /* العداد الحي الرقمي */
+        .live-counter-box {
+            text-align: center; margin-top: 40px; z-index: 10;
+        }
+        .counter-value {
+            font-family: 'Space Mono', monospace; font-size: 42px; font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); letter-spacing: -1px;
+        }
+        .counter-rate { font-size: 13px; color: #00f0ff; margin-top: 5px; font-weight: 600; }
+
+        /* الزر الملكي */
+        .claim-btn {
+            background: var(--premium-gold);
+            width: 100%; padding: 20px; border-radius: 20px; border: none;
+            color: #1a1500; font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 90px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            position: relative; overflow: hidden; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .claim-btn:active { transform: scale(0.97); }
+        .claim-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-25deg); animation: shine 3s infinite;
         }
 
-        /* الزر الذهبي */
-        .gold-btn {
-            background: linear-gradient(180deg, #ffd700 0%, #ff914d 100%);
-            width: 100%; padding: 18px; border-radius: 20px;
-            border: none; color: #3d2b00; font-weight: bold; font-size: 24px;
-            box-shadow: 0 10px 20px rgba(255, 145, 77, 0.3);
+        /* شريط التنقل السفلي الاحترافي */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 20px; right: 20px;
+            background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 25px;
+            display: flex; justify-content: space-around; padding: 15px 10px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
         }
+        .nav-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: #666; font-size: 10px; font-weight: 600; text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-btn.active { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; filter: grayscale(100%); transition: 0.3s;}
+        .nav-btn.active .nav-icon { filter: grayscale(0%); transform: translateY(-2px); }
 
-        /* القائمة السفلية */
-        .nav {
-            position: fixed; bottom: 10px; left: 10px; right: 10px;
-            background: rgba(13, 21, 35, 0.9);
-            border-radius: 25px; display: flex; justify-content: space-around;
-            padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        /* الأنميشن */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+        @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); box-shadow: 0 0 70px rgba(0, 240, 255, 0.6), inset 0 0 30px #fff; } }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
     </style>
 </head>
 <body>
 
-    <div class="stats">
-        <div class="stat-card">
-            <div>CASH<br><b style="color: #2ecc71;">$0.2621</b></div>
-            <span style="font-size: 20px;">💵</span>
+    <div class="header">
+        <div class="profile-badge">
+            <span style="font-size: 18px;">🐰</span>
+            <div>
+                <div style="font-size: 14px; font-weight: 800;">EMPIRE <span style="color: #FFDF00;">PRO</span></div>
+                <div class="level-text">VIP INVESTOR</div>
+            </div>
         </div>
-        <div class="stat-card">
-            <div>GEMS<br><b>8</b></div>
-            <span style="font-size: 20px;">💎</span>
+        <div style="background: var(--glass-bg); padding: 12px; border-radius: 50%; border: 1px solid var(--glass-border);">⚙️</div>
+    </div>
+
+    <div class="balances">
+        <div class="balance-card card-cash">
+            <div class="bal-title">Total Yield</div>
+            <div class="bal-amount" style="color: #00f0ff;">$ <span id="cash">1,240.50</span></div>
+        </div>
+        <div class="balance-card card-gem">
+            <div class="bal-title">Empire Gems</div>
+            <div class="bal-amount" style="color: #FFDF00;">💎 <span id="gems">8,932</span></div>
         </div>
     </div>
 
-    <div class="machine"></div>
+    <div class="reactor-container">
+        <div class="reactor-ring-2"></div>
+        <div class="reactor-ring"></div>
+        <div class="reactor-core">⚡</div>
+        
+        <div class="live-counter-box">
+            <div class="counter-value" id="main-counter">0.000000</div>
+            <div class="counter-rate">+ 0.00015 TON / SEC</div>
+        </div>
+    </div>
 
-    <button class="gold-btn">
-        <span style="font-size: 10px; font-weight: normal; display: block;">MINING...</span>
-        1.565960
+    <button class="claim-btn" onclick="boostMining()">
+        🚀 BOOST ENGINE
     </button>
 
-    <div class="nav">
-        <span>🏠 Home</span>
-        <span>⛏️ Miners</span>
-        <span>👥 Friends</span>
+    <div class="bottom-nav">
+        <a href="#" class="nav-btn active">
+            <span class="nav-icon">🌍</span><span>EMPIRE</span>
+        </a>
+        <a href="#" class="nav-btn">
+            <span class="nav-icon">⛏️</span><span>MINERS</span>
+        </a>
+        <a href="#" class="nav-btn">
+            <span class="nav-icon">🤝</span><span>ALLIES</span>
+        </a>
+        <a href="#" class="nav-btn">
+            <span class="nav-icon">💼</span><span>VAULT</span>
+        </a>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.ready();
+        tg.setHeaderColor('#06080d');
+        tg.setBackgroundColor('#06080d');
+
+        // السحر البرمجي: عداد حقيقي بخطوط البورصة
+        let minedAmount = 145.568920;
+        const counterElement = document.getElementById('main-counter');
+
+        // تحديث الرقم كل 50 جزء من الثانية ليعطي إحساس السرعة والقوة
+        setInterval(() => {
+            minedAmount += 0.000011;
+            counterElement.innerText = minedAmount.toFixed(6);
+        }, 50);
+
+        function boostMining() {
+            // اهتزاز الهاتف عند الضغط لزيادة الواقعية
+            if(tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('heavy');
+            }
+            const btn = document.querySelector('.claim-btn');
+            btn.innerHTML = "⚡ OVERDRIVE ACTIVE!";
+            btn.style.background = "linear-gradient(135deg, #00f0ff 0%, #0055ff 100%)";
+            btn.style.color = "white";
+            
+            setTimeout(() => {
+                btn.innerHTML = "🚀 BOOST ENGINE";
+                btn.style.background = "var(--premium-gold)";
+                btn.style.color = "#1a1500";
+            }, 2000);
+        }
     </script>
 </body>
 </html>
