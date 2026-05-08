@@ -3,29 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rabbit Empire - Mining TON</title>
+    <title>Rabbit Empire</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        :root {
-            --bg: #0a0f1b;
-            --card-bg: rgba(30, 41, 59, 0.6);
-            --accent: #ff9f43;
-            --blue: #5d88ff;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
+        :root { --bg: #0a0f1b; --card-bg: #1e293b; --accent: #ff9f43; --blue: #5d88ff; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 15px; padding-bottom: 100px; }
+        
+        .header { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+        .balance-box { flex: 1; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .balance-box span { display: block; font-size: 10px; color: #8899a6; }
+        
+        .card { background: var(--card-bg); border-radius: 25px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .rabbit-img { width: 60px; height: 60px; background: #0f172a; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 12px; }
+        .grid-item { background: rgba(0,0,0,0.2); padding: 8px 2px; border-radius: 10px; text-align: center; }
+        .grid-item div { font-size: 8px; color: #64748b; }
+        .grid-item b { font-size: 11px; }
 
-        body {
-            background: var(--bg);
-            color: white;
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin: 0; padding: 15px; padding-bottom: 100px;
-            background: radial-gradient(circle at top right, #1e293b, #0a0f1b);
-            overflow-x: hidden;
-        }
+        .btn-buy { width: 100%; background: linear-gradient(135deg, #ff9f43, #ee5253); border: none; color: white; padding: 12px; border-radius: 12px; font-weight: bold; }
+        
+        .navbar { position: fixed; bottom: 10px; left: 10px; right: 10px; background: #16212e; display: flex; justify-content: space-around; padding: 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .nav-item { color: #475569; font-size: 10px; text-align: center; }
+    </style>
+</head>
+<body>
 
-        /* Stats Bar */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .balances { display: flex; gap: 10px; width: 100%; }
-        .balance
+    <div class="header">
+        <div class="balance-box"><span>🥕 Carrots</span><b>0.00</b></div>
+        <div class="balance-box"><span>💎 TON</span><b>0.500</b></div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="rabbit-img">🐰</div>
+            <div><b style="font-size:16px;">BABY RABBIT LV.1</b><br><small style="color:#5d88ff">● LOCKED</small></div>
+            <div style="margin-left:auto; text-align:right"><small>LIMIT</small><br><b>0/10</b></div>
+        </div>
+        <div class="grid">
+            <div class="grid-item"><div>COST</div><b>0.1 💎</b></div>
+            <div class="grid-item"><div>1H</div><b>+3 🥕</b></div>
+            <div class="grid-item"><div>24H</div><b>+72 🥕</b></div>
+        </div>
+        <button class="btn-buy">NEED 0.1000 💎</button>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="rabbit-img">🥕</div>
+            <div><b style="font-size:16px;">FARMER RABBIT LV.2</b><br><small style="color:#5d88ff">● LOCKED</small></div>
+            <div style="margin-left:auto; text-align:right"><small>LIMIT</small><br><b>0/10</b></div>
+        </div>
+        <div class="grid">
+            <div class="grid-item"><div>COST</div><b>0.25 💎</b></div>
+            <div class="grid-item"><div>1H</div><b>+7 🥕</b></div>
+            <div class="grid-item"><div>24H</div><b>+168 🥕</b></div>
+        </div>
+        <button class="btn-buy">NEED 0.2500 💎</button>
+    </div>
+
+    <div class="navbar">
+        <div class="nav-item"><i>👛</i><br>WALLET</div>
+        <div class="nav-item"><i>👥</i><br>FRIENDS</div>
+        <div class="nav-item" style="color:white"><i>🏠</i><br>HOME</div>
+        <div class="nav-item"><i>🔄</i><br>TRADE</div>
+    </div>
+
+    <script>
+        window.Telegram.WebApp.expand();
+        window.Telegram.WebApp.headerColor = "#0a0f1b";
+    </script>
+</body>
+</html>
