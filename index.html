@@ -3,206 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rabbit Empire</title>
+    <title>Rabbit Empire - Snow Party Clone</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0d141f;
-            --card-bg: #1a2431;
-            --info-box: #121a26;
-            --accent-blue: #5d87ff;
-            --text-gray: #8b99a7;
+            --bg-dark: #0a0f1b;
+            --card-bg: #1c2733;
+            --blue-accent: #4e8cff;
+            --ton-blue: #0088cc;
+            --snow-white: #e3f2fd;
             --carrot-orange: #ff9f43;
+            --danger-red: #ff4d4d;
+            --danger-bg: rgba(255, 77, 77, 0.1);
         }
 
         body {
-            background-color: var(--bg-color);
+            background: radial-gradient(circle at top, #1c2b3e 0%, #0a0f1b 100%);
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 15px;
-            padding-bottom: 100px;
-            direction: ltr;
+            margin: 0; padding: 15px; padding-bottom: 120px;
+            -webkit-user-select: none;
         }
 
-        /* Header Area */
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+        /* Top Header */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .profile { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; background: #253341; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
+        .name-box { font-size: 13px; font-weight: bold; }
+        .username { color: var(--blue-accent); font-size: 11px; }
 
-        .user-pill {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-img {
-            width: 38px;
-            height: 38px;
-            background: #253341;
-            border-radius: 50%;
-        }
-
-        .user-details { font-size: 13px; font-weight: bold; }
-        .user-handle { color: var(--accent-blue); font-size: 10px; }
-
-        .top-stats { display: flex; gap: 8px; }
-        .stat-pill {
+        .stats { display: flex; gap: 8px; }
+        .stat-item {
             background: rgba(255, 255, 255, 0.05);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 14px; font-weight: bold;
+            display: flex; align-items: center; gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Mining Card */
-        .rabbit-card {
+        /* Mining Cards */
+        .card {
             background: var(--card-bg);
-            border-radius: 35px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 35px; padding: 20px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
-        .card-top {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+        .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .char-img { 
+            width: 75px; height: 75px; background: #e3f2fd; 
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 45px; box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
         }
 
-        .char-frame {
-            width: 75px;
-            height: 75px;
-            background: #d6e8f4;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-        }
+        .card-info h3 { margin: 0; font-size: 18px; font-weight: 800; }
+        .status { color: var(--blue-accent); font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+        .limit { margin-left: auto; text-align: right; font-size: 11px; color: #7f8c8d; }
 
-        .card-meta h3 { margin: 0; font-size: 17px; letter-spacing: 0.3px; }
-        .lock-status { color: var(--accent-blue); font-size: 11px; font-weight: bold; }
-        .limit-info { margin-left: auto; text-align: right; font-size: 11px; color: var(--text-gray); }
+        /* Stats Grid */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+        .grid-box { background: #121a24; padding: 12px 5px; border-radius: 18px; text-align: center; }
+        .label { font-size: 9px; color: #7f8c8d; margin-bottom: 5px; font-weight: bold; }
+        .val { font-size: 13px; font-weight: bold; }
 
-        /* Grid Info */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .grid-box {
-            background: var(--info-box);
-            padding: 10px;
-            border-radius: 18px;
-            text-align: center;
-        }
-
-        .box-label { font-size: 9px; color: var(--text-gray); margin-bottom: 4px; font-weight: bold; }
-        .box-val { font-size: 13px; font-weight: bold; }
-
-        /* Action Buttons */
-        .action-row { display: flex; gap: 10px; }
-        .produced-display {
-            flex: 1;
-            background: rgba(255,255,255,0.02);
-            border-radius: 18px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .buy-action-btn {
+        /* Produced & Button Row */
+        .card-footer { display: flex; gap: 12px; }
+        .produced { flex: 1; background: #121a24; border-radius: 20px; padding: 12px; text-align: center; }
+        
+        .buy-btn {
             flex: 1.5;
-            background: #3a272c;
-            border: 1px solid #5a2c2c;
-            border-radius: 18px;
-            color: #ff5252;
+            background: #2a1b1e;
+            border: 1px solid #4a2525;
+            border-radius: 20px;
             padding: 12px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
+        .btn-text { color: var(--danger-red); font-weight: 800; font-size: 13px; }
+        .btn-sub { color: var(--danger-red); font-size: 8px; opacity: 0.6; font-weight: bold; }
 
-        /* Navbar */
-        .nav-bar {
-            position: fixed;
-            bottom: 20px;
-            left: 15px;
-            right: 15px;
-            background: rgba(20, 28, 38, 0.95);
+        /* Navigation Bar */
+        .nav {
+            position: fixed; bottom: 25px; left: 15px; right: 15px;
+            background: rgba(26, 38, 52, 0.95);
             backdrop-filter: blur(15px);
             border-radius: 30px;
-            display: flex;
-            padding: 12px;
-            justify-content: space-around;
-            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-around;
+            padding: 12px; border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .nav-link { text-align: center; color: var(--text-gray); font-size: 9px; font-weight: bold; }
-        .nav-link.active { color: white; background: #2c3a4a; padding: 8px 18px; border-radius: 20px; margin-top: -5px; }
+        .nav-item { color: #64748b; font-size: 10px; text-align: center; font-weight: bold; cursor: pointer; }
+        .nav-item.active { 
+            color: white; background: #2c3e50; 
+            padding: 10px 20px; border-radius: 22px; 
+            margin-top: -8px; 
+        }
+        .nav-item i { display: block; font-size: 18px; margin-bottom: 4px; }
 
     </style>
 </head>
 <body>
 
-    <div class="top-header">
-        <div class="user-pill">
-            <div class="user-img"></div>
-            <div class="user-details">
-                LIGHT👑 <br>
-                <span class="user-handle">@y888el</span>
-            </div>
+    <div class="header">
+        <div class="profile">
+            <div class="avatar"></div>
+            <div class="name-box">LIGHT👑 <br><span class="username">@y888el</span></div>
         </div>
-        <div class="top-stats">
-            <div class="stat-pill">💎 0</div>
-            <div class="stat-pill">🥕 0</div>
+        <div class="stats">
+            <div class="stat-item">💎 0</div>
+            <div class="stat-item">🥕 2</div>
         </div>
     </div>
 
-    <div class="rabbit-card">
-        <div class="card-top">
-            <div class="char-frame">🐰</div>
-            <div class="card-meta">
+    <div class="card">
+        <div class="card-header">
+            <div class="char-img">🐰</div>
+            <div class="card-info">
                 <h3>BABY RABBIT LV.1</h3>
-                <div class="lock-status">● LOCKED</div>
+                <div class="status"><span style="font-size: 8px;">●</span> LOCKED</div>
             </div>
-            <div class="limit-info">LIMIT<br><b style="color:white">0</b>/10</div>
+            <div class="limit">LIMIT<br><b style="color:white">0</b>/10</div>
         </div>
-        <div class="info-grid">
-            <div class="grid-box"><div class="label">COST</div><div class="box-val" style="color:#f1c40f">0.1 💎</div></div>
-            <div class="grid-box"><div class="label">CARROT /1H</div><div class="box-val" style="color:#3498db">+3 🥕</div></div>
-            <div class="grid-box"><div class="label">CARROT /24H</div><div class="box-val" style="color:#1abc9c">+72 🥕</div></div>
+        <div class="grid">
+            <div class="grid-box"><div class="label">COST</div><div class="val" style="color: #ffcc00;">0.1 💎</div></div>
+            <div class="grid-box"><div class="label">CARROT /1H</div><div class="val" style="color: #3498db;">+3 🥕</div></div>
+            <div class="grid-box"><div class="label">CARROT /24H</div><div class="val" style="color: #2ecc71;">+72 🥕</div></div>
         </div>
-        <div class="action-row">
-            <div class="produced-display"><div class="label">PRODUCED</div><div class="box-val">0.0000 🥕</div></div>
-            <div class="buy-action-btn">
-                <div style="font-size:12px; font-weight:bold">NEED 0.1000 💎</div>
-                <div style="font-size:8px; opacity:0.7">INSUFFICIENT BALANCE</div>
+        <div class="card-footer">
+            <div class="produced"><div class="label">PRODUCED</div><div class="val">0.0000 🥕</div></div>
+            <div class="buy-btn">
+                <div class="btn-text">NEED 0.1000 💎</div>
+                <div class="btn-sub">INSUFFICIENT BALANCE</div>
             </div>
         </div>
     </div>
 
-    <div class="nav-bar">
-        <div class="nav-link">👛<br>WALLET</div>
-        <div class="nav-link">👥<br>FRIENDS</div>
-        <div class="nav-link active">🏠<br>HOME</div>
-        <div class="nav-link">🔄<br>TRADE</div>
-        <div class="nav-link">...<br>MORE</div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.headerColor = "#0d141f";
-    </script>
-</body>
-</html>
+    <div class="card">
+        <div class="card-header">
+            <div class="char-img">🥕</div>
+            <div class="card-info">
+                <h3>FARMER RABBIT LV.
