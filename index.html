@@ -3,184 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rabbit Empire - Snow Party Clone</title>
+    <title>Meme Mining Clone</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* 1. نظام الألوان المتطور طبق الأصل */
         :root {
-            --bg-color: #0d141f; /* خلفية كحلي غامق جداً */
-            --card-bg: rgba(30, 41, 59, 0.6); /* خلفية الكرت زجاجية */
-            --sub-card-bg: #121a24; /* خلفية الصناديق الداخلية */
-            --accent-blue: #5a87ff; /* أزرق الإضاءة والتوهج */
-            --text-gray: #8b99a7; /* رمادي النصوص الثانوية */
-            --danger-red: #ff4d4d; /* أحمر الأزرار */
-            --danger-btn-bg: rgba(255, 77, 77, 0.08); /* خلفية الزر الأحمر الشفافة */
-            --danger-border: rgba(255, 77, 77, 0.2); /* حدود الزر الأحمر المتوهجة */
-            --glass: rgba(255, 255, 255, 0.05); /* زجاج ناعم */
+            --bg-dark: #050a14;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --gold-gradient: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+            --blue-glow: #4e8cff;
         }
 
         body {
-            background-color: var(--bg-color);
-            background: radial-gradient(circle at top right, #1e2e42 0%, #0d141f 100%);
+            background: #050a14 url('https://w0.peakpx.com/wallpaper/403/614/HD-wallpaper-dark-blue-background-dark-blue-aesthetic.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; padding: 15px; padding-bottom: 120px;
-            direction: ltr; /* اللغة الأساسية إنجليزية حسب الصورة */
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            margin: 0; padding: 15px; overflow-x: hidden;
         }
 
-        /* 2. تطبيق تأثير Glassmorphism بدقة مع Blur وتوهج */
-        .glass {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px); /* تأثير الضباب الخلفي */
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05); /* حدود شفافة ناعمة */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); /* ظل ناعم */
+        /* الطبقة العلوية: الملف الشخصي والعملات */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .user-info { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 50px; border: 1px solid var(--glass-border); }
+        .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #ffd700; }
+        .lvl-bar { width: 60px; height: 4px; background: #333; border-radius: 10px; margin-top: 4px; }
+        .lvl-progress { width: 40%; height: 100%; background: #a052ff; border-radius: 10px; }
+
+        .currency-container { display: flex; gap: 10px; margin-top: 20px; }
+        .currency-box { 
+            flex: 1; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+            padding: 10px; border-radius: 15px; border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: space-between;
         }
 
-        /* Header Area */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .user-block { display: flex; align-items: center; gap: 10px; }
-        .user-photo { width: 38px; height: 38px; background: #253341; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
-        .user-name { font-size: 13px; font-weight: bold; }
-        .user-id { color: var(--accent-blue); font-size: 10px; font-weight: bold; margin-top: 1px; }
+        /* المحرك الرئيسي (الماكينة) */
+        .main-engine {
+            display: flex; justify-content: center; align-items: center;
+            margin: 40px 0; position: relative;
+        }
+        .engine-img {
+            width: 220px; filter: drop-shadow(0 0 20px var(--blue-glow));
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        .balances { display: flex; gap: 8px; }
-        .balance-pill {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 5px 12px; border-radius: 20px;
-            font-size: 14px; font-weight: bold;
-            display: flex; align-items: center; gap: 5px;
-            border: 1px solid rgba(255,255,255,0.05);
+        /* الأزرار الكبيرة */
+        .mining-button {
+            background: var(--gold-gradient);
+            width: 100%; padding: 18px; border-radius: 20px;
+            text-align: center; font-weight: 900; font-size: 20px; color: #3d2b00;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            border: none; margin-bottom: 20px;
         }
 
-        /* 3. تصميم الكرت الرئيسي - طبق الأصل وبدون أي خطأ */
-        .card {
-            border-radius: 35px; padding: 20px;
-            margin-bottom: 15px;
+        /* الشبكة السفلية (المهام والمكافآت) */
+        .bottom-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .grid-item {
+            background: rgba(255,255,255,0.05); padding: 12px 5px; border-radius: 15px;
+            text-align: center; border: 1px solid var(--glass-border);
         }
+        .grid-item img { width: 30px; margin-bottom: 5px; }
+        .grid-item span { font-size: 10px; display: block; font-weight: bold; }
 
-        .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .char-frame { 
-            width: 75px; height: 75px; background: #d6e8f4; 
-            border-radius: 20px; display: flex; align-items: center; justify-content: center;
-            font-size: 45px; box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+        /* القائمة السفلية */
+        .nav-bar {
+            position: fixed; bottom: 10px; left: 10px; right: 10px;
+            background: rgba(13, 21, 35, 0.9); border-radius: 25px;
+            display: flex; justify-content: space-around; padding: 12px;
+            border: 1px solid var(--glass-border);
         }
-
-        .card-meta h3 { margin: 0; font-size: 17px; letter-spacing: 0.3px; font-weight: 800; }
-        .card-status { color: var(--accent-blue); font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-        .status-dot { font-size: 8px; }
-
-        .limit-info { margin-left: auto; text-align: right; font-size: 11px; color: var(--text-gray); }
-
-        /* Grid Info */
-        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
-        .grid-box { background: var(--sub-card-bg); padding: 10px 5px; border-radius: 18px; text-align: center; }
-        .box-label { font-size: 9px; color: var(--text-gray); margin-bottom: 4px; font-weight: bold; }
-        .box-val { font-size: 13px; font-weight: bold; }
-
-        /* 4. تصميم الأزرار طبق الأصل (الحالة الحمراء المعطلة المتوهجة) */
-        .action-row { display: flex; gap: 12px; }
-        .produced-box { flex: 1; background: rgba(255,255,255,0.02); border-radius: 18px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.02); }
-        
-        .buy-action-btn {
-            flex: 1.5;
-            background: var(--danger-btn-bg);
-            border: 1px solid var(--danger-border);
-            border-radius: 18px;
-            color: var(--danger-red);
-            padding: 12px;
-            text-align: center;
-            display: flex; flex-direction: column; justify-content: center;
-            box-shadow: 0 0 15px rgba(255, 77, 77, 0.1); /* توهج أحمر خفيف */
-        }
-
-        /* Bottom Navbar - طبق الأصل بالخطوط والرموز */
-        .navbar {
-            position: fixed; bottom: 20px; left: 15px; right: 15px;
-            background: rgba(20, 28, 38, 0.95);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-radius: 30px; display: flex; padding: 12px; justify-content: space-around;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .nav-link { text-align: center; color: var(--text-gray); font-size: 9px; font-weight: bold; cursor: pointer; }
-        .nav-link i { display: block; font-size: 18px; margin-bottom: 4px; }
-        .nav-link.active { color: white; background: #2c3a4a; padding: 8px 18px; border-radius: 20px; margin-top: -5px;}
+        .nav-link { font-size: 10px; color: #707579; text-align: center; text-decoration: none; }
+        .nav-link.active { color: #4e8cff; }
 
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="user-block">
-            <div class="user-photo" style="background:url('https://ramzito33-create.github.io/-rabbit-empire/avatar_light.png') center/cover"></div>
-            <div class="user-name">LIGHT👑 <br><span class="user-id">@y888el</span></div>
+    <div class="header">
+        <div class="user-info">
+            <div class="avatar" style="background: url('https://via.placeholder.com/35') center/cover;"></div>
+            <div>
+                <div style="font-size: 12px; font-weight: bold;">LIGHT👑 <span style="color:#ffd700">LVL 3</span></div>
+                <div class="lvl-bar"><div class="lvl-progress"></div></div>
+            </div>
         </div>
-        <div class="balances">
-            <div class="balance-pill">💎 0</div>
-            <div class="balance-pill">🥕 0</div>
+        <div style="display: flex; gap: 8px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px;">🇬🇧</div>
+            <div style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px;">☰</div>
         </div>
     </div>
 
-    <div class="card glass">
-        <div class="card-header">
-            <div class="char-frame">🐰</div>
-            <div class="card-meta">
-                <h3>BABY RABBIT LV.1</h3>
-                <div class="card-status"><span class="status-dot">●</span> LOCKED</div>
-            </div>
-            <div class="limit-info">LIMIT<br><b style="color:white">0</b>/10</div>
+    <div class="currency-container">
+        <div class="currency-box">
+            <div><div style="font-size: 9px; color: #8b99a7;">CASH</div><div style="font-size: 16px; font-weight: bold; color: #2ecc71;">$0.<span style="font-size: 12px;">2621</span></div></div>
+            <div style="font-size: 20px;">💵</div>
         </div>
-        <div class="info-grid">
-            <div class="grid-box"><div class="box-label">COST</div><div class="box-val" style="color:#f1c40f">0.1 💎</div></div>
-            <div class="grid-box"><div class="box-label">CARROT /1H</div><div class="box-val" style="color:#3498db">+3 🥕</div></div>
-            <div class="grid-box"><div class="box-label">CARROT /24H</div><div class="box-val" style="color:#1abc9c">+72 🥕</div></div>
-        </div>
-        <div class="action-row">
-            <div class="produced-box"><div class="box-label">PRODUCED</div><div class="box-val">0.0000 🥕</div></div>
-            <div class="buy-action-btn">
-                <div style="font-size:12px; font-weight:bold">NEED 0.1000 💎</div>
-                <div style="font-size:8px; opacity:0.7">INSUFFICIENT BALANCE</div>
-            </div>
+        <div class="currency-box">
+            <div><div style="font-size: 9px; color: #8b99a7;">GEMS</div><div style="font-size: 16px; font-weight: bold;">8</div></div>
+            <div style="font-size: 20px;">💎</div>
         </div>
     </div>
 
-    <div class="card glass">
-        <div class="card-header">
-            <div class="char-frame">🥕</div>
-            <div class="card-meta">
-                <h3>FARMER RABBIT LV.2</h3>
-                <div class="card-status"><span class="status-dot">●</span> LOCKED</div>
-            </div>
-            <div class="limit-info">LIMIT<br><b style="color:white">0</b>/10</div>
+    <div class="main-engine">
+        <img src="https://static.vecteezy.com/system/resources/previews/013/441/090/original/futuristic-robot-head-illustration-free-vector.jpg" class="engine-img" alt="Mining Machine">
         </div>
-        <div class="info-grid">
-            <div class="grid-box"><div class="box-label">COST</div><div class="box-val" style="color:#f1c40f">0.25 💎</div></div>
-            <div class="grid-box"><div class="box-label">CARROT /1H</div><div class="box-val" style="color:#3498db">+7 🥕</div></div>
-            <div class="grid-box"><div class="box-label">CARROT /24H</div><div class="box-val" style="color:#1abc9c">+168 🥕</div></div>
-        </div>
-        <div class="action-row">
-            <div class="produced-box"><div class="box-label">PRODUCED</div><div class="box-val">0.0000 🥕</div></div>
-            <div class="buy-action-btn">
-                <div style="font-size:12px; font-weight:bold">NEED 0.2500 💎</div>
-                <div style="font-size:8px; opacity:0.7">INSUFFICIENT BALANCE</div>
-            </div>
-        </div>
+
+    <button class="mining-button">
+        1.565960 <br>
+        <span style="font-size: 12px; font-weight: normal; opacity: 0.8;">~$0.000002</span>
+    </button>
+
+    <div class="bottom-grid">
+        <div class="grid-item">🎁<br><span>BONUS</span></div>
+        <div class="grid-item">🚀<br><span>BOOST</span></div>
+        <div class="grid-item">📋<br><span>MISSIONS</span></div>
+        <div class="grid-item">🎁<br><span>SHOP</span></div>
     </div>
 
-    <div class="navbar">
-        <div class="nav-link">👛<br>WALLET</div>
-        <div class="nav-link">👥<br>FRIENDS</div>
-        <div class="nav-link active">🏠<br>HOME</div>
-        <div class="nav-link">🔄<br>TRADE</div>
-        <div class="nav-link">...<br>MORE</div>
+    <div class="nav-bar">
+        <a href="#" class="nav-link active">🏠<br>Home</a>
+        <a href="#" class="nav-link">⛏️<br>Miners</a>
+        <a href="#" class="nav-link">✅<br>Tasks</a>
+        <a href="#" class="nav-link">👥<br>Friends</a>
+        <a href="#" class="nav-link">👛<br>Wallet</a>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.headerColor = "#1e2e42";
-        tg.backgroundColor = "#0d141f";
+        tg.backgroundColor = "#050a14";
+        tg.headerColor = "#050a14";
     </script>
 </body>
 </html>
