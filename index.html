@@ -3,136 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Meme Mining Clone</title>
+    <title>Meme Mining Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* نظام الألوان والمؤثرات لـ Meme Mining */
         :root {
-            --bg-dark: #050a14;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --gold-gradient: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
-            --blue-glow: #4e8cff;
+            --bg-deep: #050a14;
+            --gold-glow: linear-gradient(180deg, #ffde59 0%, #ff914d 100%);
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --border-light: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            background: #050a14 url('https://w0.peakpx.com/wallpaper/403/614/HD-wallpaper-dark-blue-background-dark-blue-aesthetic.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% -20%, #1e3a5f 0%, #050a14 100%);
             color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0; padding: 15px; overflow-x: hidden;
         }
 
-        /* الطبقة العلوية: الملف الشخصي والعملات */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .user-info { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 50px; border: 1px solid var(--glass-border); }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #ffd700; }
-        .lvl-bar { width: 60px; height: 4px; background: #333; border-radius: 10px; margin-top: 4px; }
-        .lvl-progress { width: 40%; height: 100%; background: #a052ff; border-radius: 10px; }
-
-        .currency-container { display: flex; gap: 10px; margin-top: 20px; }
-        .currency-box { 
-            flex: 1; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
-            padding: 10px; border-radius: 15px; border: 1px solid var(--glass-border);
-            display: flex; align-items: center; justify-content: space-between;
-        }
-
-        /* المحرك الرئيسي (الماكينة) */
-        .main-engine {
-            display: flex; justify-content: center; align-items: center;
-            margin: 40px 0; position: relative;
-        }
-        .engine-img {
-            width: 220px; filter: drop-shadow(0 0 20px var(--blue-glow));
-            animation: pulse 2s infinite ease-in-out;
-        }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-
-        /* الأزرار الكبيرة */
-        .mining-button {
-            background: var(--gold-gradient);
-            width: 100%; padding: 18px; border-radius: 20px;
-            text-align: center; font-weight: 900; font-size: 20px; color: #3d2b00;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            border: none; margin-bottom: 20px;
-        }
-
-        /* الشبكة السفلية (المهام والمكافآت) */
-        .bottom-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .grid-item {
-            background: rgba(255,255,255,0.05); padding: 12px 5px; border-radius: 15px;
-            text-align: center; border: 1px solid var(--glass-border);
-        }
-        .grid-item img { width: 30px; margin-bottom: 5px; }
-        .grid-item span { font-size: 10px; display: block; font-weight: bold; }
-
-        /* القائمة السفلية */
-        .nav-bar {
-            position: fixed; bottom: 10px; left: 10px; right: 10px;
-            background: rgba(13, 21, 35, 0.9); border-radius: 25px;
-            display: flex; justify-content: space-around; padding: 12px;
-            border: 1px solid var(--glass-border);
-        }
-        .nav-link { font-size: 10px; color: #707579; text-align: center; text-decoration: none; }
-        .nav-link.active { color: #4e8cff; }
-
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <div class="user-info">
-            <div class="avatar" style="background: url('https://via.placeholder.com/35') center/cover;"></div>
-            <div>
-                <div style="font-size: 12px; font-weight: bold;">LIGHT👑 <span style="color:#ffd700">LVL 3</span></div>
-                <div class="lvl-bar"><div class="lvl-progress"></div></div>
-            </div>
-        </div>
-        <div style="display: flex; gap: 8px;">
-            <div style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px;">🇬🇧</div>
-            <div style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px;">☰</div>
-        </div>
-    </div>
-
-    <div class="currency-container">
-        <div class="currency-box">
-            <div><div style="font-size: 9px; color: #8b99a7;">CASH</div><div style="font-size: 16px; font-weight: bold; color: #2ecc71;">$0.<span style="font-size: 12px;">2621</span></div></div>
-            <div style="font-size: 20px;">💵</div>
-        </div>
-        <div class="currency-box">
-            <div><div style="font-size: 9px; color: #8b99a7;">GEMS</div><div style="font-size: 16px; font-weight: bold;">8</div></div>
-            <div style="font-size: 20px;">💎</div>
-        </div>
-    </div>
-
-    <div class="main-engine">
-        <img src="https://static.vecteezy.com/system/resources/previews/013/441/090/original/futuristic-robot-head-illustration-free-vector.jpg" class="engine-img" alt="Mining Machine">
-        </div>
-
-    <button class="mining-button">
-        1.565960 <br>
-        <span style="font-size: 12px; font-weight: normal; opacity: 0.8;">~$0.000002</span>
-    </button>
-
-    <div class="bottom-grid">
-        <div class="grid-item">🎁<br><span>BONUS</span></div>
-        <div class="grid-item">🚀<br><span>BOOST</span></div>
-        <div class="grid-item">📋<br><span>MISSIONS</span></div>
-        <div class="grid-item">🎁<br><span>SHOP</span></div>
-    </div>
-
-    <div class="nav-bar">
-        <a href="#" class="nav-link active">🏠<br>Home</a>
-        <a href="#" class="nav-link">⛏️<br>Miners</a>
-        <a href="#" class="nav-link">✅<br>Tasks</a>
-        <a href="#" class="nav-link">👥<br>Friends</a>
-        <a href="#" class="nav-link">👛<br>Wallet</a>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.backgroundColor = "#050a14";
-        tg.headerColor = "#050a14";
-    </script>
-</body>
-</html>
+        /* الجزء العلوي: الأرصدة */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .user-pill { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-light); }
+        
+        .currency-row { display: flex; gap: 10px; margin-bottom: 30px; }
+        .stat-card { 
+            flex: 1; background: var(--glass-card); backdrop-filter: blur(10px);
+            padding: 12px; border-radius: 15px; border: 1px solid var(--border-
