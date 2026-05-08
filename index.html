@@ -3,236 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TON EMPIRE OS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <title>TON EMPIRE: ULTRA-EDITION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-base: #06080d;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-blue: #00f0ff;
-            --gold: #FFDF00;
-            --red: #ff3366;
-            --green: #00ff88;
+            --bg: #03070c;
+            --accent: #00f2ff;
+            --gold: #ffcf4d;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.07);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--bg-base);
-            background-image: radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.05), transparent 60%);
-            color: #ffffff; font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% -10%, rgba(0, 242, 255, 0.1), transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(255, 207, 77, 0.05), transparent 40%);
+            color: #fff; font-family: 'Space Grotesk', sans-serif;
             height: 100vh; overflow: hidden; display: flex; flex-direction: column;
         }
 
-        /* حاوية الصفحات */
-        .app-container { padding: 20px; flex: 1; overflow-y: auto; padding-bottom: 90px; }
-        
-        /* نظام إخفاء وإظهار الصفحات */
-        .view { display: none; animation: fadeIn 0.3s ease-out; }
+        .container { flex: 1; padding: 25px; overflow-y: auto; padding-bottom: 100px; scrollbar-width: none; }
+        .container::-webkit-scrollbar { display: none; }
+
+        .view { display: none; animation: ios-slide 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- الهوية العلوية المشتركة --- */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .profile-badge { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 30px; padding: 8px 16px; display: flex; align-items: center; gap: 10px; }
-        
-        /* --- صفحة الرئيسية (HOME) --- */
-        .balance-display { text-align: center; margin: 30px 0; }
-        .balance-title { font-size: 12px; color: #888; letter-spacing: 2px; text-transform: uppercase; }
-        .balance-amount { font-family: 'Space Mono', monospace; font-size: 48px; color: var(--neon-blue); text-shadow: 0 0 20px rgba(0, 240, 255, 0.3); margin: 10px 0; }
-        .rate-badge { display: inline-block; background: rgba(0, 255, 136, 0.1); color: var(--green); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid rgba(0, 255, 136, 0.2); }
-
-        .reactor { width: 150px; height: 150px; margin: 40px auto; border-radius: 50%; background: radial-gradient(circle, rgba(0,240,255,0.2) 0%, transparent 70%); border: 2px dashed rgba(0,240,255,0.3); display: flex; justify-content: center; align-items: center; animation: spin 20s linear infinite; position: relative; }
-        .reactor-core { width: 80px; height: 80px; border-radius: 50%; background: var(--neon-blue); box-shadow: 0 0 40px var(--neon-blue); animation: pulse 2s infinite alternate; }
-
-        /* --- صفحة المتجر (MINERS) --- */
-        .miner-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .miner-info h3 { font-size: 16px; margin-bottom: 5px; }
-        .miner-info p { font-size: 11px; color: #aaa; }
-        .buy-btn { background: linear-gradient(135deg, #FFDF00, #D4AF37); border: none; padding: 10px 20px; border-radius: 15px; font-weight: 800; color: #000; cursor: pointer; }
-
-        /* --- صفحة المحفظة (WALLET) --- */
-        .wallet-card { background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 20px; }
-        .action-row { display: flex; gap: 15px; }
-        .btn-deposit { flex: 1; background: var(--neon-blue); color: #000; border: none; padding: 15px; border-radius: 15px; font-weight: 800; font-size: 16px; cursor: pointer; }
-        .btn-withdraw { flex: 1; background: transparent; color: var(--red); border: 1px solid var(--red); padding: 15px; border-radius: 15px; font-weight: 800; font-size: 16px; cursor: pointer; }
-
-        /* النوافذ المنبثقة (Modals) السحب والإيداع */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center; }
-        .modal-box { background: #0f141e; border: 1px solid var(--glass-border); border-radius: 25px; padding: 25px; width: 90%; text-align: center; }
-        .modal-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 15px; border-radius: 10px; margin: 15px 0; outline: none; font-family: 'Space Mono'; }
-        .close-modal { margin-top: 15px; color: #888; font-size: 14px; text-decoration: underline; cursor: pointer; }
-
-        /* --- شريط التنقل السفلي --- */
-        .bottom-nav { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(10, 12, 18, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 25px; display: flex; justify-content: space-around; padding: 15px 10px; z-index: 50; }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #666; font-size: 10px; font-weight: 600; text-decoration: none; transition: 0.3s; cursor: pointer; }
-        .nav-btn.active { color: #fff; }
-        .nav-icon { font-size: 22px; filter: grayscale(100%); transition: 0.3s; margin-bottom: 3px; }
-        .nav-btn.active .nav-icon { filter: grayscale(0%); transform: translateY(-3px); }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 100% { transform: scale(1.1); box-shadow: 0 0 60px var(--neon-blue); } }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-        
-        <div class="header">
-            <div class="profile-badge">
-                <span style="font-size: 18px;">👑</span>
-                <div>
-                    <div style="font-size: 14px; font-weight: 800;">EMPIRE <span style="color: var(--gold);">OS</span></div>
-                </div>
-            </div>
-            <div style="font-size: 20px;">⚙️</div>
-        </div>
-
-        <div id="view-home" class="view active">
-            <div class="balance-display">
-                <div class="balance-title">TOTAL BALANCE</div>
-                <div class="balance-amount">$ <span id="main-balance">0.000000</span></div>
-                <div class="rate-badge">Mining: +<span id="mining-rate">0.0001</span> / sec</div>
-            </div>
-            
-            <div class="reactor">
-                <div class="reactor-core"></div>
-            </div>
-        </div>
-
-        <div id="view-miners" class="view">
-            <h2 style="margin-bottom: 20px;">Upgrades</h2>
-            
-            <div class="miner-card">
-                <div class="miner-info">
-                    <h3>⚡ Basic Node</h3>
-                    <p>Produces +0.001 / sec</p>
-                    <p style="color: var(--gold); margin-top: 5px;">Cost: $5.00</p>
-                </div>
-                <button class="buy-btn" onclick="buyMiner(5, 0.001)">BUY</button>
-            </div>
-
-            <div class="miner-card">
-                <div class="miner-info">
-                    <h3>🚀 Quantum ASIC</h3>
-                    <p>Produces +0.015 / sec</p>
-                    <p style="color: var(--gold); margin-top: 5px;">Cost: $50.00</p>
-                </div>
-                <button class="buy-btn" onclick="buyMiner(50, 0.015)">BUY</button>
-            </div>
-        </div>
-
-        <div id="view-wallet" class="view">
-            <div class="wallet-card">
-                <div style="color: #888; font-size: 12px;">AVAILABLE TO WITHDRAW</div>
-                <div style="font-size: 32px; font-family: 'Space Mono'; margin: 10px 0;">$ <span id="wallet-balance">0.00</span></div>
-            </div>
-            
-            <div class="action-row">
-                <button class="btn-deposit" onclick="openModal('deposit-modal')">⬇ DEPOSIT</button>
-                <button class="btn-withdraw" onclick="openModal('withdraw-modal')">⬆ WITHDRAW</button>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="deposit-modal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>Deposit TON</h3>
-            <p style="font-size: 12px; color: #888; margin-top: 10px;">Send TON to this address. It will be converted to USD automatically.</p>
-            <div style="background: white; width: 150px; height: 150px; margin: 20px auto; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold;">[QR CODE]</div>
-            <input type="text" class="modal-input" value="UQDT...FakeAddress...7xyz" readonly>
-            <div class="close-modal" onclick="closeModal('deposit-modal')">Cancel</div>
-        </div>
-    </div>
-
-    <div id="withdraw-modal" class="modal-overlay">
-        <div class="modal-box">
-            <h3>Withdraw Funds</h3>
-            <input type="text" class="modal-input" placeholder="Enter TON Address">
-            <input type="number" class="modal-input" placeholder="Amount (Min $10.00)">
-            <button class="btn-withdraw" style="width: 100%; border:none; background: var(--red); color: white;" onclick="alert('Insufficient Balance!')">Request Withdrawal</button>
-            <div class="close-modal" onclick="closeModal('withdraw-modal')">Cancel</div>
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-btn active" onclick="switchTab('home', this)">
-            <span class="nav-icon">🌍</span><span>HOME</span>
-        </div>
-        <div class="nav-btn" onclick="switchTab('miners', this)">
-            <span class="nav-icon">⛏️</span><span>MINERS</span>
-        </div>
-        <div class="nav-btn" onclick="switchTab('wallet', this)">
-            <span class="nav-icon">💼</span><span>WALLET</span>
-        </div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.setHeaderColor('#06080d');
-
-        // --- نظام حفظ واسترجاع البيانات (الرصيد لا يضيع!) ---
-        // يبدأ من الصفر إذا كان مستخدم جديد
-        let balance = parseFloat(localStorage.getItem('empire_balance')) || 0.000000;
-        let rate = parseFloat(localStorage.getItem('empire_rate')) || 0.000050; // سرعة ابتدائية ضعيفة جداً
-
-        const balanceEl = document.getElementById('main-balance');
-        const walletBalEl = document.getElementById('wallet-balance');
-        const rateEl = document.getElementById('mining-rate');
-
-        rateEl.innerText = rate.toFixed(5);
-
-        // تحديث العداد كل 100 جزء من الثانية
-        setInterval(() => {
-            balance += (rate / 10); // نقسم على 10 لأننا نحدث كل 100ms (عشر ثانية)
-            balanceEl.innerText = balance.toFixed(6);
-            walletBalEl.innerText = balance.toFixed(2); // في المحفظة نعرض رقمين فقط
-            
-            // حفظ الرصيد في الجهاز كل ثانية تقريباً
-            if(Math.random() < 0.1) {
-                localStorage.setItem('empire_balance', balance);
-            }
-        }, 100);
-
-        // --- نظام التنقل بين الصفحات ---
-        function switchTab(tabId, element) {
-            // إخفاء كل الصفحات
-            document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
-            // إزالة التفعيل من كل الأزرار
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // إظهار الصفحة المطلوبة
-            document.getElementById('view-' + tabId).classList.add('active');
-            element.classList.add('active');
-            
-            if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        @keyframes ios-slide {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        // --- نظام شراء العمال ---
-        function buyMiner(cost, boost) {
-            if (balance >= cost) {
-                balance -= cost;
-                rate += boost;
-                localStorage.setItem('empire_rate', rate);
-                localStorage.setItem('empire_balance', balance);
-                rateEl.innerText = rate.toFixed(5);
-                alert("Upgrade Successful! 🚀");
-            } else {
-                alert("Insufficient Funds! You need $" + cost);
-            }
-        }
+        /* --- نوار التحكم العلوي --- */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .status-pill { background: var(--glass); border: 1px solid var(--border); padding: 6px 14px; border-radius: 40px; display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+        .status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 1.5s infinite; }
 
-        // --- نظام النوافذ المنبثقة (Modals) ---
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-    </script>
-</body>
-</html>
+        /* --- واجهة الرصيد --- */
+        .balance-hero { text-align: center; margin: 20px 0 40px; }
+        .bal-label { font-size: 11px; color: #666; font-weight: 700; letter-spacing: 2px; }
+        .bal-val { font-family: 'JetBrains Mono', monospace; font-size: 44px; margin: 5px 0; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* --- المفاعل النووي (The Reactor) --- */
+        .core-wrap { position: relative; width: 220px; height: 220px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; }
+        .ring { position: absolute; border-radius: 50%; border: 1px solid var(--border); }
+        .ring-1 { width: 100%; height: 100%; border-style: dashed; animation: rotate 20s linear infinite; }
+        .ring-2 { width: 80%; height: 80%; border: 1px solid rgba(0,242,255,0.2); animation: rotate 10s linear infinite reverse; }
+        .main-core { width: 90px; height: 90px; background: var(--accent); border-radius: 35% 65% 64% 36% / 30% 30% 70% 70%; filter: blur(2px); box-shadow: 0 0 50px var(--accent); animation: blob 5s ease-in-out infinite, core-pulse 2s infinite alternate; }
+
+        /* --- بطاقات المتجر (Miners) --- */
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 24px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
+        .card:active { transform: scale(0.97); background: rgba(255,255,255,0.06); }
+        .card-icon { width: 50px; height: 50px; background: rgba(255,207,77,0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .card-info { flex: 1; margin: 0 15px; }
+        .card-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .card-info p { font-size: 11px; color: #666; }
+        .price-tag { background: var(--gold); color: #000; padding: 8px 15px; border-radius: 14px; font-size: 13px; font-weight: 800; }
