@@ -1,48 +1,167 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TON EMPIRE VIP</title>
+    <title>TON EMPIRE: SUPREME</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg: #020508;
+            --panel: #0a101a;
+            --accent: #00f2ff;
+            --gold: #ffcf4d;
+            --text-main: #ffffff;
+            --text-dim: #6b7a8d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+
         body {
-            background: #03070c; color: white;
-            font-family: sans-serif; margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            height: 100vh; overflow: hidden;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 242, 255, 0.15), transparent 50%);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            height: 100vh; overflow: hidden; display: flex; flex-direction: column;
         }
-        /* تصميم النواة الخارقة */
-        .core {
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, #00f2ff 0%, transparent 70%);
-            border-radius: 50%; box-shadow: 0 0 50px #00f2ff;
-            margin: 50px 0; animation: pulse 2s infinite alternate;
-        }
-        .balance-box {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            padding: 20px; border-radius: 20px; width: 100%; text-align: center;
-        }
-        #amount { font-size: 35px; font-weight: bold; color: #00f2ff; }
-        @keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.1); opacity: 1; } }
+
+        .app-content { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
+
+        /* الشاشات */
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* الرصيد الخارق */
+        .hero-section { text-align: center; padding: 40px 0; }
+        .main-balance { font-size: 50px; font-weight: 800; letter-spacing: -1px; margin: 10px 0; color: var(--accent); text-shadow: 0 0 30px rgba(0, 242, 255, 0.3); }
+        .mining-power { background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 6px 15px; border-radius: 50px; font-size: 12px; font-weight: bold; border: 1px solid rgba(0, 255, 136, 0.2); }
+
+        /* المفاعل المركزي (SVG Animation) */
+        .reactor-container { width: 200px; height: 200px; margin: 20px auto; position: relative; display: flex; align-items: center; justify-content: center; }
+        .reactor-svg { width: 100%; height: 100%; animation: rotate 10s linear infinite; }
+        .core-glow { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; position: absolute; filter: blur(35px); animation: pulse 2s infinite alternate; }
+
+        /* بطاقات التطوير (Upgrade Cards) */
+        .upgrade-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; position: relative; overflow: hidden; }
+        .upgrade-card::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); }
+        .icon-box { width: 55px; height: 55px; background: rgba(255,255,255,0.03); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .info-box { flex: 1; }
+        .info-box h3 { font-size: 16px; margin-bottom: 4px; }
+        .info-box p { font-size: 12px; color: var(--text-dim); }
+        .buy-btn { background: var(--accent); color: #000; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 13px; }
+
+        /* المحفظة (Wallet VIP) */
+        .wallet-box { background: linear-gradient(145deg, #111a27, #060a12); border-radius: 30px; padding: 35px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 25px; text-align: center; }
+        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .action-btn { padding: 18px; border-radius: 20px; border: none; font-weight: bold; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-dep { background: #fff; color: #000; }
+        .btn-wit { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* شريط التنقل (The Tab Bar) */
+        .navbar { position: fixed; bottom: 25px; left: 20px; right: 20px; background: rgba(10, 16, 26, 0.96); backdrop-filter: blur(20px); border-radius: 35px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; padding: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.8); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #4e5b6e; text-decoration: none; font-size: 10px; font-weight: 700; gap: 4px; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--accent); }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; }
+        .nav-item.active svg { transform: translateY(-3px); filter: drop-shadow(0 0 5px var(--accent)); }
+
+        @keyframes rotate { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.3); opacity: 1; } }
     </style>
 </head>
 <body>
-    <h2>إمبراطورية الأرنب 🥕</h2>
-    <div class="core"></div>
-    <div class="balance-box">
-        <div style="font-size: 12px; color: #888;">رصيدك الحالي</div>
-        <div id="amount">0.000000</div>
+
+    <div class="app-content">
+        <div id="home" class="page active">
+            <div class="hero-section">
+                <p style="font-size: 11px; color: var(--text-dim); letter-spacing: 2px;">LIVE EMPIRE REVENUE</p>
+                <div class="main-balance" id="balance-view">0.000000</div>
+                <div class="mining-power">Mining: <span id="rate-view">0.000010</span>/s</div>
+            </div>
+
+            <div class="reactor-container">
+                <div class="core-glow"></div>
+                <svg class="reactor-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(0, 242, 255, 0.1)" stroke-width="2" />
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="10 5" />
+                </svg>
+            </div>
+        </div>
+
+        <div id="build" class="page">
+            <h2 style="margin-bottom: 20px;">Upgrades</h2>
+            <div class="upgrade-card">
+                <div class="icon-box">⚡</div>
+                <div class="info-box">
+                    <h3>Alpha Node</h3>
+                    <p>+0.00005 TON/s</p>
+                </div>
+                <button class="buy-btn" onclick="buy(2, 0.00005)">$2.00</button>
+            </div>
+            <div class="upgrade-card">
+                <div class="icon-box">💎</div>
+                <div class="info-box">
+                    <h3>Quantum ASIC</h3>
+                    <p>+0.00050 TON/s</p>
+                </div>
+                <button class="buy-btn" onclick="buy(25, 0.00050)">$25.00</button>
+            </div>
+        </div>
+
+        <div id="vault" class="page">
+            <div class="wallet-box">
+                <p style="font-size: 12px; color: var(--text-dim);">AVAILABLE BALANCE</p>
+                <div style="font-size: 32px; font-weight: bold; margin: 15px 0;">$ <span id="wallet-view">0.00</span></div>
+            </div>
+            <div class="btn-row">
+                <button class="action-btn btn-dep" onclick="alert('Send TON to: UQ...7xyz')">Deposit</button>
+                <button class="action-btn btn-wit" onclick="alert('Minimum $10.00')">Withdraw</button>
+            </div>
+        </div>
     </div>
+
+    <div class="navbar">
+        <div class="nav-item active" onclick="nav('home', this)">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>HOME</span>
+        </div>
+        <div class="nav-item" onclick="nav('build', this)">
+            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            <span>BUILD</span>
+        </div>
+        <div class="nav-item" onclick="nav('vault', this)">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            <span>VAULT</span>
+        </div>
+    </div>
+
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // لفتح الشاشة كاملة فوراً
-        
-        let bal = 0.0;
-        setInterval(() => {
-            bal += 0.00001;
-            document.getElementById('amount').innerText = bal.toFixed(6);
-        }, 100);
-    </script>
-</body>
-</html>
+        tg.expand();
+        tg.ready();
+
+        let bal = parseFloat(localStorage.getItem('supreme_bal')) || 0.0;
+        let rate = parseFloat(localStorage.getItem('supreme_rate')) || 0.00001;
+
+        function update() {
+            bal += (rate / 10);
+            document.getElementById('balance-view').innerText = bal.toFixed(6);
+            document.getElementById('wallet-view').innerText = bal.toFixed(2);
+            document.getElementById('rate-view').innerText = rate.toFixed(6);
+            if(Math.random() < 0.1) localStorage.setItem('supreme_bal', bal);
+        }
+        setInterval(update, 100);
+
+        function nav(pageId, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            el.classList.add('active');
+            if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function buy(cost, boost) {
+            if(bal >= cost) {
+                bal -= cost;
+                rate += boost;
+                localStorage.setItem('supreme_rate', rate);
