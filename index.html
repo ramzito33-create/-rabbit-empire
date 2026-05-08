@@ -3,30 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Meme Mining Edition</title>
+    <title>Meme Mining</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* نظام الألوان والمؤثرات لـ Meme Mining */
-        :root {
-            --bg-deep: #050a14;
-            --gold-glow: linear-gradient(180deg, #ffde59 0%, #ff914d 100%);
-            --glass-card: rgba(255, 255, 255, 0.03);
-            --border-light: rgba(255, 255, 255, 0.1);
-        }
-
         body {
-            background-color: var(--bg-deep);
-            background-image: radial-gradient(circle at 50% -20%, #1e3a5f 0%, #050a14 100%);
+            background: radial-gradient(circle at 50% 20%, #1a2a44 0%, #050a14 100%);
             color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            margin: 0; padding: 15px; overflow-x: hidden;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* الجزء العلوي: الأرصدة */
-        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .user-pill { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-light); }
-        
-        .currency-row { display: flex; gap: 10px; margin-bottom: 30px; }
-        .stat-card { 
-            flex: 1; background: var(--glass-card); backdrop-filter: blur(10px);
-            padding: 12px; border-radius: 15px; border: 1px solid var(--border-
+        /* حاوية العملات */
+        .stats {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* الماكينة المركزية */
+        .machine {
+            width: 220px;
+            height: 220px;
+            background: url('https://img.freepik.com/premium-vector/futuristic-robot-head-illustration_274619-307.jpg') center/contain no-repeat;
+            filter: drop-shadow(0 0 20px #4e8cff);
+            margin: 40px 0;
+        }
+
+        /* الزر الذهبي العريض */
+        .gold-btn {
+            background: linear-gradient(180deg, #ffd700 0%, #ff914d 100%);
+            width: 100%;
+            padding: 20px;
+            border-radius: 20px;
+            border: none;
+            color: #3d2b00;
+            font-weight: bold;
+            font-size: 24px;
+            box-shadow: 0 10px 20px rgba(255, 145, 77, 0.3);
+            text-align: center;
+        }
+
+        .sub-text {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        /* القائمة السفلية */
+        .nav {
+            position: fixed;
+            bottom: 10px;
+            width: 90%;
+            background: rgba(13, 21, 35, 0.9);
+            padding: 15px;
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-around;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div><small>CASH</small><br><b>$0.2621</b></div>
+            <span>💵</span>
+        </div>
+        <div class="stat-box">
+            <div><small>GEMS</small><br><b>8</b></div>
+            <span>💎</span>
+        </div>
+    </div>
+
+    <div class="machine"></div>
+
+    <div class="gold-btn">
+        1.565960<br>
+        <span class="sub-text">~$0.000002</span>
+    </div>
+
+    <div class="nav">
+        <span>🏠 Home</span>
+        <span>⛏️ Miners</span>
+        <span>👥 Friends</span>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+    </script>
+</body>
+</html>
