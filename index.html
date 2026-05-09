@@ -1,138 +1,62 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TON EMPIRE: SUPREME</title>
+    <title>TON EMPIRE | PRO</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg: #020508;
-            --panel: #0a101a;
-            --accent: #00f2ff;
-            --gold: #ffcf4d;
-            --text-main: #ffffff;
-            --text-dim: #6b7a8d;
-        }
+        :root { --accent: #00f2ff; --bg: #050a12; --card: #0e1621; --gold: #ffcf4d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; user-select: none; }
+        body { background: var(--bg); color: white; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        /* الهيدر الاحترافي */
+        .header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 35px; height: 35px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        /* منطقة الرصيد */
+        .main-card { flex: 1; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .balance-label { font-size: 12px; color: #888; letter-spacing: 2px; }
+        .balance-value { font-size: 45px; font-weight: 900; margin: 10px 0; color: var(--accent); text-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
+        
+        /* المفاعل (The Engine) */
+        .engine { width: 180px; height: 180px; position: relative; border-radius: 50%; border: 2px solid rgba(0,242,255,0.1); display: flex; align-items: center; justify-content: center; margin: 30px 0; }
+        .engine-core { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 50px var(--accent); animation: breathe 3s infinite ease-in-out; }
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } }
 
-        body {
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 0%, rgba(0, 242, 255, 0.15), transparent 50%);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            height: 100vh; overflow: hidden; display: flex; flex-direction: column;
-        }
-
-        .app-content { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
-
-        /* الشاشات */
-        .page { display: none; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* الرصيد الخارق */
-        .hero-section { text-align: center; padding: 40px 0; }
-        .main-balance { font-size: 50px; font-weight: 800; letter-spacing: -1px; margin: 10px 0; color: var(--accent); text-shadow: 0 0 30px rgba(0, 242, 255, 0.3); }
-        .mining-power { background: rgba(0, 255, 136, 0.1); color: #00ff88; padding: 6px 15px; border-radius: 50px; font-size: 12px; font-weight: bold; border: 1px solid rgba(0, 255, 136, 0.2); }
-
-        /* المفاعل المركزي (SVG Animation) */
-        .reactor-container { width: 200px; height: 200px; margin: 20px auto; position: relative; display: flex; align-items: center; justify-content: center; }
-        .reactor-svg { width: 100%; height: 100%; animation: rotate 10s linear infinite; }
-        .core-glow { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; position: absolute; filter: blur(35px); animation: pulse 2s infinite alternate; }
-
-        /* بطاقات التطوير (Upgrade Cards) */
-        .upgrade-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; position: relative; overflow: hidden; }
-        .upgrade-card::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); }
-        .icon-box { width: 55px; height: 55px; background: rgba(255,255,255,0.03); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .info-box { flex: 1; }
-        .info-box h3 { font-size: 16px; margin-bottom: 4px; }
-        .info-box p { font-size: 12px; color: var(--text-dim); }
-        .buy-btn { background: var(--accent); color: #000; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 13px; }
-
-        /* المحفظة (Wallet VIP) */
-        .wallet-box { background: linear-gradient(145deg, #111a27, #060a12); border-radius: 30px; padding: 35px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 25px; text-align: center; }
-        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .action-btn { padding: 18px; border-radius: 20px; border: none; font-weight: bold; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-dep { background: #fff; color: #000; }
-        .btn-wit { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-
-        /* شريط التنقل (The Tab Bar) */
-        .navbar { position: fixed; bottom: 25px; left: 20px; right: 20px; background: rgba(10, 16, 26, 0.96); backdrop-filter: blur(20px); border-radius: 35px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-around; padding: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.8); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #4e5b6e; text-decoration: none; font-size: 10px; font-weight: 700; gap: 4px; cursor: pointer; transition: 0.3s; }
+        /* القائمة السفلية */
+        .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--card); border-radius: 25px; padding: 12px; display: flex; justify-content: space-around; border: 1px solid rgba(255,255,255,0.08); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; font-weight: bold; cursor: pointer; }
         .nav-item.active { color: var(--accent); }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; transition: 0.3s; }
-        .nav-item.active svg { transform: translateY(-3px); filter: drop-shadow(0 0 5px var(--accent)); }
-
-        @keyframes rotate { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-        @keyframes pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.3); opacity: 1; } }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="app-content">
-        <div id="home" class="page active">
-            <div class="hero-section">
-                <p style="font-size: 11px; color: var(--text-dim); letter-spacing: 2px;">LIVE EMPIRE REVENUE</p>
-                <div class="main-balance" id="balance-view">0.000000</div>
-                <div class="mining-power">Mining: <span id="rate-view">0.000010</span>/s</div>
-            </div>
-
-            <div class="reactor-container">
-                <div class="core-glow"></div>
-                <svg class="reactor-svg" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(0, 242, 255, 0.1)" stroke-width="2" />
-                    <circle cx="50" cy="50" r="38" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="10 5" />
-                </svg>
-            </div>
+    <div class="header">
+        <div class="user-info">
+            <div class="avatar" id="user-initial">U</div>
+            <span id="user-name">User</span>
         </div>
+        <div style="color: var(--gold); font-weight: bold;">VIP 👑</div>
+    </div>
 
-        <div id="build" class="page">
-            <h2 style="margin-bottom: 20px;">Upgrades</h2>
-            <div class="upgrade-card">
-                <div class="icon-box">⚡</div>
-                <div class="info-box">
-                    <h3>Alpha Node</h3>
-                    <p>+0.00005 TON/s</p>
-                </div>
-                <button class="buy-btn" onclick="buy(2, 0.00005)">$2.00</button>
-            </div>
-            <div class="upgrade-card">
-                <div class="icon-box">💎</div>
-                <div class="info-box">
-                    <h3>Quantum ASIC</h3>
-                    <p>+0.00050 TON/s</p>
-                </div>
-                <button class="buy-btn" onclick="buy(25, 0.00050)">$25.00</button>
-            </div>
-        </div>
-
-        <div id="vault" class="page">
-            <div class="wallet-box">
-                <p style="font-size: 12px; color: var(--text-dim);">AVAILABLE BALANCE</p>
-                <div style="font-size: 32px; font-weight: bold; margin: 15px 0;">$ <span id="wallet-view">0.00</span></div>
-            </div>
-            <div class="btn-row">
-                <button class="action-btn btn-dep" onclick="alert('Send TON to: UQ...7xyz')">Deposit</button>
-                <button class="action-btn btn-wit" onclick="alert('Minimum $10.00')">Withdraw</button>
-            </div>
+    <div class="main-card">
+        <p class="balance-label">TOTAL ASSETS</p>
+        <h1 class="balance-value">$ <span id="balance">0.000000</span></h1>
+        <p style="color: #00ff88; font-size: 13px;">Profit: +<span id="rate">0.00001</span>/s</p>
+        
+        <div class="engine">
+            <div class="engine-core"></div>
         </div>
     </div>
 
-    <div class="navbar">
-        <div class="nav-item active" onclick="nav('home', this)">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>HOME</span>
-        </div>
-        <div class="nav-item" onclick="nav('build', this)">
-            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-            <span>BUILD</span>
-        </div>
-        <div class="nav-item" onclick="nav('vault', this)">
-            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-            <span>VAULT</span>
-        </div>
+    <div class="nav">
+        <div class="nav-item active"><i>🏠</i><span>HOME</span></div>
+        <div class="nav-item"><i>⛏️</i><span>MINE</span></div>
+        <div class="nav-item"><i>💼</i><span>WALLET</span></div>
+        <div class="nav-item"><i>👥</i><span>FRIENDS</span></div>
     </div>
 
     <script>
@@ -140,28 +64,33 @@
         tg.expand();
         tg.ready();
 
-        let bal = parseFloat(localStorage.getItem('supreme_bal')) || 0.0;
-        let rate = parseFloat(localStorage.getItem('supreme_rate')) || 0.00001;
-
-        function update() {
-            bal += (rate / 10);
-            document.getElementById('balance-view').innerText = bal.toFixed(6);
-            document.getElementById('wallet-view').innerText = bal.toFixed(2);
-            document.getElementById('rate-view').innerText = rate.toFixed(6);
-            if(Math.random() < 0.1) localStorage.setItem('supreme_bal', bal);
-        }
-        setInterval(update, 100);
-
-        function nav(pageId, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            el.classList.add('active');
-            if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        // جلب بيانات المستخدم الحقيقية من تلجرام
+        const user = tg.initDataUnsafe.user;
+        if (user) {
+            document.getElementById('user-name').innerText = user.first_name;
+            document.getElementById('user-initial').innerText = user.first_name.charAt(0);
         }
 
-        function buy(cost, boost) {
-            if(bal >= cost) {
-                bal -= cost;
-                rate += boost;
-                localStorage.setItem('supreme_rate', rate);
+        // نظام التعدين الحسابي (Elapsed Time Calculation)
+        let balance = parseFloat(localStorage.getItem('balance')) || 0.0;
+        let rate = parseFloat(localStorage.getItem('rate')) || 0.00001;
+        let lastUpdate = parseInt(localStorage.getItem('last_update')) || Date.now();
+
+        // حساب الأرباح التي ضاعت أثناء إغلاق البوت (Passive Income)
+        const now = Date.now();
+        const elapsedSeconds = (now - lastUpdate) / 1000;
+        const offlineProfit = elapsedSeconds * rate;
+        balance += offlineProfit;
+
+        function updateUI() {
+            balance += (rate / 10);
+            document.getElementById('balance').innerText = balance.toFixed(6);
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('last_update', Date.now());
+        }
+
+        setInterval(updateUI, 100);
+        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+    </script>
+</body>
+</html>
